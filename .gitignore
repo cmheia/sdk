@@ -13,8 +13,6 @@ Tools/Keil/Project/objs/*
 *.crf
 si/*
 *.uvgui.*
-.cproject
-.project
 .settings/*
 .vscode/tags
 Bin/*
@@ -27,3 +25,5 @@ tools/py_scripts/flasher.ini
 *.out
 *.map
 *.lst
+
+!.settings/ch.hsr.ifs.sconsolidator.core.prefs

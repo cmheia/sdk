@@ -1,0 +1,4 @@
+ch.hsr.sconsolidator.core.BuildSettingsPreferencePage_useParentScope=false
+eclipse.preferences.version=1
+numberOfJobs=8
+perfAccuracyProfile=default
