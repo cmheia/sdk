@@ -1,0 +1,32 @@
+# Copyright 2018 cmheia
+import os
+
+from site_utils import log_err, log_info, log_warn
+
+# ARTIFACT = os.path.basename(Dir('.').abspath)
+ARTIFACT = os.path.basename(os.getcwd())
+
+# SOURCES = Glob('*.c') + Glob('*/' * 1 + '*.c') + Glob('*/' * 2 + '*.c') + Glob('*/' * 3 + '*.c') + Glob('*/' * 4 + '*.c')
+SOURCES = Glob('*.c') \
+    + Glob('cjson/*.c') \
+    + Glob('dhcpserver/*.c') \
+    + Glob('dnsserver/*.c') \
+    + Glob('httpclient/*.c') \
+    + Glob('iperf/*.c') \
+    + Glob('libcoap/*.c') \
+    + Glob('libwebsockets-2.1-stable/*.c') \
+    + Glob('matrixssl/*.c') + Glob('matrixssl/*/*.c') \
+    + Glob('mdns/*.c') + Glob('mdns/*/*.c') \
+    + Glob('mqtt/*.c') \
+    + Glob('ntp/*.c') \
+    + Glob('oneshotconfig/*.c') \
+    + Glob('ota/*.c') \
+    + Glob('ping/*.c') \
+    + Glob('polarssl/library/*.c') \
+    + Glob('sslserver/*.c') \
+    + Glob('web/*.c') \
+    + Glob('wm_atcmd/*.c')
+
+# log_warn([s.rstr() for s in SOURCES])
+
+Lib(ARTIFACT, SOURCES)

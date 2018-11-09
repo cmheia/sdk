@@ -4,6 +4,8 @@ Tools/Keil/Project/objs/*
 *.ko
 *.obj
 *.elf
+.sconsign.dblite
+*.pyc
 *.rar
 *.zip
 *.bak
@@ -15,6 +17,8 @@ si/*
 .project
 .settings/*
 Bin/*
+Debug
+Release
 *.img
 *.bin
 *.output/

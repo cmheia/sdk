@@ -1,0 +1,13 @@
+# Copyright 2018 cmheia
+import os
+
+from site_utils import log_err, log_info, log_warn
+
+# ARTIFACT = os.path.basename(Dir('.').abspath)
+ARTIFACT = os.path.basename(os.getcwd())
+
+SOURCES = Glob('*/*.c') + Glob('*/*/*.c')
+
+# log_warn([s.rstr() for s in SOURCES])
+
+Lib(ARTIFACT, SOURCES)
