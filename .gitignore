@@ -19,6 +19,7 @@ si/*
 Bin/*
 Debug
 Release
+tools/py_scripts/flasher.ini
 *.img
 *.bin
 *.output/
