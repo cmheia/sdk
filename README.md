@@ -6,74 +6,74 @@
 
 请查看 [ChangeLog](./doc/ChangeLog.txt)
     
-# 编译说明
+# 配置环境
 
-## 1. 使用 Keil 编译
+## Windows
 
-使用 MDK 打开 WM_SDK/tools/Keil/Project/WM_W600.uvproj ，点击 Project -》Build Target 即可编译
+### C 编译器
 
-## 2. 使用 Eclipse 编译
+1. [点击这里](https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q1-update)下载GCC，建议选择`Windows zip package`，`Windows installer`亦可
+1. 解压（Windows zip package）或安装（Windows installer）
+1. 修改`cmd_py3_gcc4.cmd`、`eclipse_py3_gcc4.cmd`和`vscode_py3_gcc4.cmd`内的GCC路径`GCC_HOME`
 
-打开 Eclipse 环境，右键项目名称，执行 Build Project 即可。
+### 构建工具
+1. 到[这里](https://www.python.org/downloads/windows/)下载**Python3**并安装
 
-## 3. 使用控制台编译
+   > `Optional Features`页面必须勾选`pip`和`py launcher`，`Advanced Options`页面必须勾选`Associates files with Python`。
 
-`使用linux平台编译时，需更新tools/makeimg 和 tools/makeimg_all 的执行权限，如 chmod 755 makeimg `
+1. 启动`命令提示符`
 
-### 常用指令
+1. 逐一输入下列命令执行
 
-make	// 执行编译
+   ```batch
+   pip install bcolors
+   pip install colorama
+   pip install pyprind
+   pip install scons
+   pip install serial
+   pip install xmodem
+   ```
 
-make clean	//清理编译过程中的中间文件
+1. 修改`cmd_py3_gcc4.cmd`、`eclipse_py3_gcc4.cmd`和`vscode_py3_gcc4.cmd`内的Python路径`PYTHON_HOME`
+  
+### 调试器
+#### Eclipse IDE
+1. 到[这里](https://www.eclipse.org/downloads/packages/release/oxygen/3a)下载`Eclipse IDE for C/C++ Developers`并解压
+1. 修改`eclipse_py3_gcc4.cmd`内的`Eclipse`路径`ECLIPSE_PATH`
+1. 到[这里](http://www.sconsolidator.com/projects/sconsolidator/wiki/Installation)安装`SConsolidator`
+1. 到[这里](https://gnu-mcu-eclipse.github.io/plugins/install/)安装`GNU MCU Eclipse`
 
-make erase	//擦除flash
+#### Visual Studio Code
+1. 到[这里](https://code.visualstudio.com/Download)下载`Visual Studio Code`并安装
+1. 修改`vscode_py3_gcc4.cmd`内的`VSCode`路径`VSCODE_PATH`
 
-make flash	//编译并烧录 w600\_gz.img
 
-make flash_all	//编译并烧录 w600.fls 固件
+# 编译
 
-#### 可带参数：
+## 使用 Eclipse
 
-* COMPILE=gcc 
+   1. 双击`eclipse_py3_gcc4.cmd`启动`Eclipse`
+   1. 导入工程
+   1. 在`Project Explorer`窗口内右键点击项目名称，进入`SCons`子菜单，点击`Interactive build`。
 
-  默认gcc，可选armcc
+## 使用命令行
 
-* TARGET=w600 
+   1. 双击`cmd_py3_gcc4.cmd`启动`命令提示符`
+   1. 输入`scons`，回车执行。
+   > 使用linux平台编译时，需添加`tools/makeimg`和`tools/makeimg_all`的执行权限，例如`chmod +x makeimg`
 
-  生成的bin文件名称，默认为w600
+## 使用 Keil
 
-* DL_PORT=COM6 
+   1. 打开`WM_SDK/tools/Keil/Project/WM_W600.uvproj`
+   1. 点击`Project`下的子菜单`Build Target`
 
-  make flash 进行固件烧录时使用的端口号，默认COM1
+# 烧写
 
-* DL_BAUD=2000000
+   1. 双击`cmd_py3_gcc4.cmd`启动`命令提示符`
 
-  make flash 进行固件烧录时使用的波特率，默认 2Mbps，部分型号的串口不支持。
+   1. 输入`flasher Debug/bin/example.blink.blink_gz.img COM11`，回车执行。
 
-  支持 2000000, 1000000, 921600, 460800, 115200等不同速率及进行下载.
-
-#### 示例
-
-* 使用 armcc 进行固件编译
-
-  make COMPILE=armcc 	//使用armcc编译
-
-* 使用 gcc 进行固件编译
-
-  make COMPILE=gcc	 		//使用gcc编译
-
-* 使用 gcc 进行固件编译并烧录，端口 COM8，下载波特率 1Mbps
-
-  make flash COMPILE=gcc DL_PORT=COM8 DL_BAUD=1000000
-
-# Example 编译说明
-
-请查看 [README](./example/README.md)
+   > 成功下载一次之后，在使用同一个串口下载时无需再次指定，即重复烧写命令可为`flasher Debug/bin/example.blink.blink_gz.img`
 
 # 其它
-
-- GCC版本下载：https://launchpad.net/gcc-arm-embedded/4.9/4.9-2014-q4-major/
-- 为缩短编译时间，platform 和 src 目录内的源码，不参与每一次的应用层编译，如修改该目录内文件，可运行对应目录下的make_xxx_lib.sh，更新/lib下的文件，下次编译时即可链接更新后的文件.
-- 可修改根目录下 Makefile ，USE_LIB=0，则默认使用源码编译。
-- 使用 armcc 编译时，需修改 tools/too_chain.def 下面的 Line 38：KEIL_PATH 路径和 Line 45：INC 路径。
-- 有任何疑问或问题反馈，可联系 support@thingsturn.com
+1. 有任何疑问，都不要问我。
