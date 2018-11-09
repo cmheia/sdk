@@ -16,6 +16,7 @@ si/*
 .cproject
 .project
 .settings/*
+.vscode/tags
 Bin/*
 Debug
 Release

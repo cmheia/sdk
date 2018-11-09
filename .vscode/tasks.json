@@ -1,0 +1,44 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    // https://code.visualstudio.com/docs/editor/tasks#vscode
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "SCons Build(Debug)",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "scons debug -j8",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "SCons Build(Release)",
+            "type": "shell",
+            "group": "build",
+            "command": "scons release -j8",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "Download blinky(Debug)",
+            "type": "shell",
+            "group": "build",
+            "command": "tools\\py_scripts\\flasher.py Debug/bin/example.blinky.blinky_gz.img COM11",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "OpenOCD",
+            "type": "shell",
+            "command": "openocd -s tools/openocd/scripts -f w600_swd.cfg",
+            "problemMatcher": []
+        }
+    ]
+}
