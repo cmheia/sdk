@@ -7,6 +7,7 @@ REM set BUILD_FLAVOR=debug
 
 set PYTHON_VERSION=3
 set GCC_VERSION=-arm-none-eabi-4_8-2014q1-20140314-win32
+set JLINK_VERSION=620h
 set OPENOCD_PATH=%~dp0tools\openocd\bin
 set OPENOCD_SCRIPTS=%~dp0openocd\scripts
 rem set runocd=openocd -s tools\openocd\scripts -f w600_swd.cfg
@@ -22,7 +23,9 @@ set PYTHON_HOME=
 
 set SYS_PATH=%SystemRoot%\system32;%SystemRoot%
 
-set PATH=%SYS_PATH%;%GCC_PATH%;%PYTHON_PATH%;%OPENOCD_PATH%
+set JLINK_HOME=C:\Program Files (x86)\SEGGER\JLink_V%JLINK_VERSION%
+
+set PATH=%SYS_PATH%;%GCC_PATH%;%PYTHON_PATH%;%JLINK_HOME%;%OPENOCD_PATH%
 
 set work_dir=%~dp0
 set target_arg=%1
