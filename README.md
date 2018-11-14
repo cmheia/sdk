@@ -73,7 +73,7 @@
 
    1. 输入`flasher Debug/bin/example.blink.blink_gz.img COM11`，回车执行。
 
-   > 成功下载一次之后，在使用同一个串口下载时无需再次指定，即重复烧写命令可为`flasher Debug/bin/example.blink.blink_gz.img`
+   > 成功下载一次之后，再使用同一个串口下载时无需再次指定，即重复烧写命令可为`flasher Debug/bin/example.blink.blink_gz.img`
 
 # 其它
 1. 有任何疑问，都不要问我。
