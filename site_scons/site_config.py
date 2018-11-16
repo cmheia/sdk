@@ -125,8 +125,7 @@ DEFAULT_LIBS = [
     'common',
     'drivers',
     'network',
-    'os_core',
-    'os_port',
+    'os',
     'sys',
     'boot',
 ]

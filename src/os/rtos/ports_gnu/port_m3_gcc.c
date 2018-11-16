@@ -60,6 +60,15 @@
 #include "task.h"
 #include "wm_config.h"
 
+/**
+ * http://www.keil.com/support/man/docs/armclang_ref/armclang_ref_jhg1476893564298.htm
+ * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0774g/jhg1476893564298.html
+ * https://www.freertos.org/implementation/a00013.html
+ * This attribute tells the compiler that the function is an embedded assembly function.
+ * You can write the body of the function entirely in assembly code using __asm statements.
+ */
+#define NAKED_FUNC __attribute__ ((naked))
+
 #if TLS_OS_FREERTOS
 
 #ifndef configMAX_SYSCALL_INTERRUPT_PRIORITY
@@ -152,6 +161,7 @@ portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE
 /*-----------------------------------------------------------*/
 
 
+NAKED_FUNC
 void SVC_Handler( void )
 {	
 	__asm volatile (
@@ -169,6 +179,7 @@ void SVC_Handler( void )
 }
 /*-----------------------------------------------------------*/
 
+NAKED_FUNC
 void vPortStartFirstTask( void )
 {	
 	__asm volatile (			
@@ -255,6 +266,7 @@ void vPortExitCritical( void )
 }
 /*-----------------------------------------------------------*/
 
+NAKED_FUNC
 void PendSV_Handler( void )
 {
 	__asm volatile(				
@@ -309,6 +321,7 @@ void prvSetupTimerInterrupt( void )
 #endif
 /*-----------------------------------------------------------*/
 
+NAKED_FUNC
 void portDISABLE_INTERRUPTS( void )
 {
 	__asm volatile(
@@ -322,6 +335,7 @@ void portDISABLE_INTERRUPTS( void )
 
 /*-----------------------------------------------------------*/
 
+NAKED_FUNC
 void portENABLE_INTERRUPTS( void )
 {
 	__asm volatile (

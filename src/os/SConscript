@@ -1,9 +1,9 @@
 # Copyright 2018 cmheia
 from site_utils import log_err, log_info, log_warn
 
-ARTIFACT = 'os_core'
+ARTIFACT = 'os'
 
-SOURCES = Glob('*.c') + Glob('source/*.c')
+SOURCES = Glob('rtos/*.c') + Glob('rtos/*/*.c')
 
 # log_warn([s.rstr() for s in SOURCES])
 
