@@ -5,7 +5,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "SCons Build(Debug)",
+            "label": "SCons Build (Debug)",
             "type": "shell",
             "group": {
                 "kind": "build",
@@ -13,20 +13,43 @@
             },
             "command": "scons debug -j8",
             "problemMatcher": [
-                "$go"
+                "$gcc"
             ]
         },
         {
-            "label": "SCons Build(Release)",
+            "label": "SCons Build [Slow] (Debug)",
+            "type": "shell",
+            "group": "build",
+            "command": "scons debug -j1",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "SCons Clean (Debug)",
+            "type": "shell",
+            "group": "build",
+            "command": "scons debug -c",
+            "problemMatcher": []
+        },
+        {
+            "label": "SCons Build (Release)",
             "type": "shell",
             "group": "build",
             "command": "scons release -j8",
             "problemMatcher": [
-                "$go"
+                "$gcc"
             ]
         },
         {
-            "label": "Download blinky(Debug)",
+            "label": "SCons Clean (Release)",
+            "type": "shell",
+            "group": "build",
+            "command": "scons release -c",
+            "problemMatcher": []
+        },
+        {
+            "label": "Download blinky (Debug)",
             "type": "shell",
             "group": "build",
             "command": "tools\\py_scripts\\flasher.py Debug/bin/example.blinky.blinky_gz.img COM11",
