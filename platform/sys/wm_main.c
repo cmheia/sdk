@@ -158,6 +158,8 @@ void wm_gpio_config()
 	wm_spi_ck_config(WM_IO_PB_16);
 	wm_spi_di_config(WM_IO_PB_17);
 	wm_spi_do_config(WM_IO_PB_18);
+
+	wm_swd_config(true);
 }
 
 int main(void)
