@@ -12,9 +12,7 @@
                 "isDefault": true
             },
             "command": "scons debug -j8",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "problemMatcher": []
         },
         {
             "label": "SCons Build [Slow] (Debug)",
@@ -37,6 +35,13 @@
             "type": "shell",
             "group": "build",
             "command": "scons release -j8",
+            "problemMatcher": []
+        },
+        {
+            "label": "SCons Build [Slow] (Release)",
+            "type": "shell",
+            "group": "build",
+            "command": "scons release -j1",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -53,9 +58,7 @@
             "type": "shell",
             "group": "build",
             "command": "tools\\py_scripts\\flasher.py Debug/bin/example.blinky.blinky_gz.img COM11",
-            "problemMatcher": [
-                "$go"
-            ]
+            "problemMatcher": []
         },
         {
             "label": "JLinkGDBServer",

@@ -69,14 +69,25 @@
             "request": "launch",
             "pythonPath": "E:/dev/py3/python",
             "program": "E:/dev/py3/Scripts/scons.py",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "args": [
                 "debug",
                 "VERBOSE=1",
                 "-n"
-            ],
-            "django": true
+            ]
+        },
+        {
+            "name": "Python: flasher",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/py_scripts/flasher.py",
+            "console": "integratedTerminal",
+            "args": [
+                "Debug/bin/example.blinky.blinky_gz.img",
+                "COM11",
+                "2000000"
+            ]
         },
         {
             "name": "Python: Current File (Integrated Terminal)",
