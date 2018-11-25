@@ -29,7 +29,7 @@
 //LWIP CONFIG
 #define TLS_CONFIG_LWIP_VER2_0_3        				CFG_ON 
 #define TLS_CONFIG_IPV4                 				CFG_ON      //must ON
-#define TLS_CONFIG_IPV6                 				CFG_OFF
+#define TLS_CONFIG_IPV6                 				CFG_ON
 #define TLS_CONFIG_DHCP_OPTION60						"Winnermicro:W600_01"
 
 /** SOCKET CONFIG **/
@@ -76,7 +76,8 @@ CRYPTO
 #define  VERC_DNS_OPT						            CFG_ON
 #define  VERC_LWIP_OPT                                  CFG_ON
 #include "wm_os_config.h"  //if you want to use source code,please open
-#include "wm_wifi_config.h"
+#include "wm_wifi_config.h"
+
 
 #include "wm_ram_config.h"
 #endif /*__WM_CONFIG_H__*/

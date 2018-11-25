@@ -488,16 +488,21 @@ int tls_cmd_get_link_status(
         lks->status = 1;
     else
         lks->status = 0;
-#if TLS_CONFIG_LWIP_VER2_0_3
-    MEMCPY(lks->ip, (char *)ip_2_ip4(&ni->ip_addr), 4);
-    MEMCPY(lks->netmask, (char *)ip_2_ip4(&ni->netmask), 4);
-    MEMCPY(lks->gw, (char *)ip_2_ip4(&ni->gw), 4);
-    MEMCPY(lks->dns1, (char *)ip_2_ip4(&ni->dns1), 4);
-    MEMCPY(lks->dns2, (char *)ip_2_ip4(&ni->dns2), 4);
-#else
     MEMCPY(lks->ip, (char *)&ni->ip_addr.addr, 4);
     MEMCPY(lks->netmask, (char *)&ni->netmask.addr, 4);
     MEMCPY(lks->gw, (char *)&ni->gw.addr, 4);
+#if TLS_CONFIG_LWIP_VER2_0_3
+    MEMCPY(lks->dns1, ip_2_ip4(&ni->dns1), 4);
+    MEMCPY(lks->dns2, ip_2_ip4(&ni->dns2), 4);
+    {
+        int i;
+        for (i = 0; i < LWIP_IPV6_NUM_ADDRESSES; i++) {
+            MEMCPY(&lks->ip6[i].ip, &ni->ip6_addr[i].addr, 16);
+            MEMCPY(&lks->ip6[i].zone, &ni->ip6_addr[i].zone, 1);
+            lks->ip6[i].status = ni->ipv6_status[i];
+        }
+    }
+#else
     MEMCPY(lks->dns1, (char *)&ni->dns1.addr, 4);
     MEMCPY(lks->dns2, (char *)&ni->dns2.addr, 4);
 #endif
@@ -1148,16 +1153,13 @@ int tls_cmd_set_ip_info(
 	            tls_dhcp_start();
 	    } else {
 	        tls_dhcp_stop();
+            MEMCPY((char *)&ethif->ip_addr.addr, &params->ip_addr, 4);
+            MEMCPY((char *)&ethif->netmask.addr, &params->netmask, 4);
+            MEMCPY((char *)&ethif->gw.addr, &params->gateway, 4);
 #if TLS_CONFIG_LWIP_VER2_0_3
-			MEMCPY((char *)ip_2_ip4(&ethif->ip_addr) , &params->ip_addr, 4);
             MEMCPY((char *)ip_2_ip4(&ethif->dns1), &params->dns, 4);
-	        MEMCPY((char *)ip_2_ip4(&ethif->netmask), &params->netmask, 4);
-	        MEMCPY((char *)ip_2_ip4(&ethif->gw), &params->gateway, 4);
 #else
-	        MEMCPY((char *)&ethif->ip_addr.addr, &params->ip_addr, 4);
 	        MEMCPY((char *)&ethif->dns1.addr, &params->dns, 4);
-	        MEMCPY((char *)&ethif->netmask.addr, &params->netmask, 4);
-	        MEMCPY((char *)&ethif->gw.addr, &params->gateway, 4);
 #endif
 	        tls_netif_set_addr(
 	                &ethif->ip_addr, &ethif->netmask, &ethif->gw);
@@ -1852,11 +1854,17 @@ int tls_cmd_get_softap_link_status(struct tls_cmd_link_status_t *lks)
     else
         lks->status = 0;
 
+#if TLS_CONFIG_LWIP_VER2_0_3
+    MEMCPY(lks->ip, ip_2_ip4(&netif->ip_addr), 4);
+    MEMCPY(lks->netmask, ip_2_ip4(&netif->netmask), 4);
+    MEMCPY(lks->gw, ip_2_ip4(&netif->gw), 4);
+    MEMCPY(lks->dns1, ip_2_ip4(&netif->ip_addr), 4);
+#else
     MEMCPY(lks->ip, (char *)&netif->ip_addr.addr, 4);
     MEMCPY(lks->netmask, (char *)&netif->netmask.addr, 4);
     MEMCPY(lks->gw, (char *)&netif->gw.addr, 4);
-
     MEMCPY(lks->dns1, (char *)&netif->ip_addr.addr, 4);
+#endif
     memset(lks->dns2, 0, 4);
 
     return 0;
@@ -1868,7 +1876,7 @@ int tls_cmd_get_sta_detail(u32 *sta_num, u8 *buf)
     int len = 0;
     u32 cnt;
     u8 *sta_buf;
-    ip_addr_t *ip_addr;
+    ip4_addr_t *ip_addr;
     struct tls_sta_info_t *sta;
 
     sta_buf = tls_mem_alloc(STA_MAC_BUF_LEN);
@@ -1887,24 +1895,14 @@ int tls_cmd_get_sta_detail(u32 *sta_num, u8 *buf)
         {
             len += sprintf((char *)(buf+len), ",%02X-%02X-%02X-%02X-%02X-%02X,-",
                                                MAC2STR(sta->mac_addr));
-        }
-        else
-        {
-#if TLS_CONFIG_LWIP_VER2_0_3        
-            len += sprintf((char *)(buf+len), ",%02X-%02X-%02X-%02X-%02X-%02X,%d.%d.%d.%d",
-                                               MAC2STR(sta->mac_addr),
-                                               ip4_addr1(ip_2_ip4(ip_addr)),
-                                               ip4_addr2(ip_2_ip4(ip_addr)),
-                                               ip4_addr3(ip_2_ip4(ip_addr)),
-                                               ip4_addr4(ip_2_ip4(ip_addr)));
-#else
-	len += sprintf((char *)(buf+len), ",%02X-%02X-%02X-%02X-%02X-%02X,%d.%d.%d.%d",
-									   MAC2STR(sta->mac_addr),
-									   ip4_addr1(&ip_addr->addr),
-									   ip4_addr2(&ip_addr->addr),
-									   ip4_addr3(&ip_addr->addr),
-									   ip4_addr4(&ip_addr->addr));
-#endif
+        } else {
+            len += sprintf((char *) (buf + len),
+                           ",%02X-%02X-%02X-%02X-%02X-%02X,%d.%d.%d.%d",
+                           MAC2STR(sta->mac_addr),
+                           ip4_addr1(ip_addr),
+                           ip4_addr2(ip_addr),
+                           ip4_addr3(ip_addr),
+                           ip4_addr4(ip_addr));
         }
         sta++;
     }

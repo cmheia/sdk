@@ -7,5 +7,5 @@ set CONTITLE="VSCode"
 
 REM set BUILD_FLAVOR=debug
 
-start %CONTITLE% %VSCODE_PATH%
+start %CONTITLE% %VSCODE_PATH% -r %~dp0
 cd /d %~dp0

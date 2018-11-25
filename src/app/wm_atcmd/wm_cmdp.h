@@ -98,6 +98,11 @@ struct tls_cmd_connect_t {
 };
 
 struct tls_cmd_link_status_t {
+    struct {
+        u32 ip[4];
+        u8  status;
+        u8  zone;
+    } ip6[3];
     u8 ip[4];
     u8 netmask[4];
     u8 gw[4];

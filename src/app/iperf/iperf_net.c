@@ -106,11 +106,7 @@ netannounce(int domain, int proto, char *local, int port)
 #if 1
 				ethif = tls_netif_get_ethif();
 				sin = (struct sockaddr_in *) res->ai_addr ;
-#if TLS_CONFIG_LWIP_VER2_0_3
-				MEMCPY((char *)&sin->sin_addr, (char *)ip_2_ip4(&ethif->ip_addr), 4); 
-#else
-				MEMCPY((char *)&sin->sin_addr, (char *)&ethif->ip_addr.addr, 4); 
-#endif
+				MEMCPY(&sin->sin_addr, &ethif->ip_addr, 4); 
 #endif
 
 

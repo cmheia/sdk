@@ -1,0 +1,37 @@
+# Copyright 2018 cmheia
+import os
+
+from site_config import DEFAULT_LIBS
+from site_utils import log_err, log_info, log_warn
+
+# ARTIFACT = os.path.basename(Dir('.').abspath)
+ARTIFACT = os.path.basename(os.getcwd())
+
+SOURCES = Glob('*.c') + Glob('*/*.c')
+
+# log_warn([s.rstr() for s in SOURCES])
+
+elf = Prog(ARTIFACT, SOURCES, with_libs=DEFAULT_LIBS)
+
+# if not elf is None:
+#     log_warn('elf: ' + str(elf))
+#     prog_siz = env.SIZ(source=elf)
+#     # log_warn('siz: ' + str(prog_siz))
+
+#     prog_lst = env.LST(source=elf)
+#     # log_warn('lst: ' + str(prog_lst))
+
+#     prog_bin = env.BIN(source=elf)
+#     # log_warn('bin: ' + str(prog_bin))
+
+#     prog_zbin = env.ZBIN(source=prog_bin)
+#     # log_warn('zbin: ' + str(prog_zbin))
+
+#     prog_img = env.IMG(source=prog_bin)
+#     # log_warn('img: ' + str(prog_img))
+
+#     prog_zimg = env.ZIMG(source=[prog_zbin, prog_bin])
+#     # log_warn('zimg: ' + str(prog_zimg))
+
+#     prog_fls = env.FLS(source=prog_img)
+#     # log_warn('fls: ' + str(prog_fls))

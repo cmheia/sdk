@@ -83,35 +83,33 @@ void TLS_DBGPRT_DUMP(char *p, u32 len)
 #if TLS_CONFIG_LWIP_VER2_0_3
 static void sys_net_up()
 {
-    ip_addr_t ip_addr, net_mask, gateway, dns1, dns2;
+    ip4_addr_t          ip_addr, net_mask, gateway;
+    ip_addr_t           dns1, dns2;
     struct tls_param_ip ip_param;
 
     tls_param_get(TLS_PARAM_ID_IP, &ip_param, FALSE);
-    if (ip_param.dhcp_enable)
-    {
-        ip_addr_set_zero(&ip_addr);
-        ip_addr_set_zero(&net_mask);
-        ip_addr_set_zero(&gateway);
-        tls_netif_set_addr( &ip_addr, &net_mask, &gateway);
+    if (ip_param.dhcp_enable) {
+        ip4_addr_set_zero(&ip_addr);
+        ip4_addr_set_zero(&net_mask);
+        ip4_addr_set_zero(&gateway);
+        tls_netif_set_addr(&ip_addr, &net_mask, &gateway);
         tls_netif_set_up();
         tls_dhcp_start();
-    }
-    else
-    {
+    } else {
         tls_dhcp_stop();
         tls_netif_set_up();
 
-        MEMCPY((char*)ip_2_ip4(&ip_addr), &ip_param.ip, 4);
-        MEMCPY((char*)ip_2_ip4(&net_mask), &ip_param.netmask, 4);
-        MEMCPY((char*)ip_2_ip4(&gateway), &ip_param.gateway, 4);
-        tls_netif_set_addr( &ip_addr, &net_mask, &gateway);
-        MEMCPY((char*)ip_2_ip4(&dns1), &ip_param.dns1, 4);
-        MEMCPY((char*)ip_2_ip4(&dns2), &ip_param.dns2, 4);
+        MEMCPY(&ip_addr.addr, &ip_param.ip, 4);
+        MEMCPY(&net_mask.addr, &ip_param.netmask, 4);
+        MEMCPY(&gateway.addr, &ip_param.gateway, 4);
+        tls_netif_set_addr(&ip_addr, &net_mask, &gateway);
+        IP_SET_TYPE(&dns1, IPADDR_TYPE_V4);
+        IP_SET_TYPE(&dns2, IPADDR_TYPE_V4);
+        MEMCPY(ip_2_ip4(&dns1), &ip_param.dns1, 4);
+        MEMCPY(ip_2_ip4(&dns2), &ip_param.dns2, 4);
         tls_netif_dns_setserver(0, &dns1);
         tls_netif_dns_setserver(1, &dns2);
     }
-
-    return ;
 }
 
 //-------------------------------------------------------------------------
@@ -156,9 +154,9 @@ static void sys_net_up()
 #if TLS_CONFIG_LWIP_VER2_0_3
 static void sys_net2_up()
 {
-    ip_addr_t ip_addr, net_mask, gateway;
+    ip4_addr_t          ip_addr, net_mask, gateway;
     struct tls_param_ip ip_param;
-    u8 dnsname[32];
+    u8                  dnsname[32];
 
     dnsname[0] = '\0';
     tls_param_get(TLS_PARAM_ID_DNSNAME, dnsname, 0);
@@ -166,22 +164,18 @@ static void sys_net2_up()
 
     tls_netif2_set_up();
 
-    MEMCPY((char*)ip_2_ip4(&ip_addr), &ip_param.ip, 4);
-    MEMCPY((char*)ip_2_ip4(&net_mask), &ip_param.netmask, 4);
-    MEMCPY((char*)ip_2_ip4(&gateway), &ip_param.gateway, 4);
+    MEMCPY(&ip_addr.addr, &ip_param.ip, 4);
+    MEMCPY(&net_mask.addr, &ip_param.netmask, 4);
+    MEMCPY(&gateway.addr, &ip_param.gateway, 4);
     tls_netif2_set_addr(&ip_addr, &net_mask, &gateway);
 
-    if (ip_param.dhcp_enable)
-    {
+    if (ip_param.dhcp_enable) {
         tls_dhcps_start();
     }
 
-    if ('\0' != dnsname[0])
-    {
+    if ('\0' != dnsname[0]) {
         tls_dnss_start(dnsname);
     }
-
-    return ;
 }
 
 //-------------------------------------------------------------------------

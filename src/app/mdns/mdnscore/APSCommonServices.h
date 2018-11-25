@@ -3858,6 +3858,9 @@ STATIC_INLINE void	Time96_Sub( Time96 *inTime, const Time96 *inSub )
 	kANSIHighBackReset		"kANSIHighBackReset"		kANSINormal "\n"
 
 
+#ifdef PATH_MAX
+#undef PATH_MAX
+#endif
 #define PATH_MAX 512
 
 

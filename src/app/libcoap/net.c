@@ -33,7 +33,7 @@
 #ifdef WITH_LWIP
 #include <lwip/pbuf.h>
 #include <lwip/udp.h>
-#include <lwip/timers.h>
+#include <lwip/timeouts.h>
 #endif
 
 #include "debug_libcoap.h"

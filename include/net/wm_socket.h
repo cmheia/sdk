@@ -12,7 +12,7 @@
 #define WM_SOCKET_H
 #include "wm_config.h"
 #if TLS_CONFIG_LWIP_VER2_0_3
-#include "wm_socket2.0.3.h"
+#include "wm_socket2x.h"
 
 #else
 #include "wm_type_def.h"
