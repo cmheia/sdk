@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "SConstruct": "python",
+        "SConscript": "python"
+    },
+    "files.exclude": {
+        ".sconsign.dblite": true,
+        "GPATH": true,
+        "GRTAGS": true,
+        "GTAGS": true
+    },
+    "C_Cpp.default.defines":[
+        "GCC_COMPILE=1",
+        "WM_W600",
+        "_DEBUG"
+    ],
+    "files.trimTrailingWhitespace": false,
+    "editor.renderWhitespace": "all"
+}

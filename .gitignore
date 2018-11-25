@@ -5,6 +5,10 @@ Tools/Keil/Project/objs/*
 *.obj
 *.elf
 .sconsign.dblite
+.noscons
+GPATH
+GTAGS
+GRTAGS
 *.pyc
 *.rar
 *.zip
