@@ -104,11 +104,11 @@ class w600dl(object):
                 else:
                     baud = DEFAULT_BAUD
                     self._log.warning('default baud is {}'.format(baud))
-                    self._config['base']['baud'] = baud
+                    self._config['base']['baud'] = int(baud)
                     save_conf = True
 
             self._port = port
-            self._baud = baud
+            self._baud = int(baud)
 
             self._log.warning(
                 'comm {} with {}, {}'.format(port, self._baud, INIT_TIMEOUT))
