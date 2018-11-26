@@ -118,7 +118,7 @@ class w600dl(object):
             self._log.warning(
                 'comm {} with {}, {}'.format(self._port, self._baud, INIT_TIMEOUT))
             self._ser = serial.Serial(
-                port=port, baudrate=INIT_BAUD, timeout=INIT_TIMEOUT)
+                port=self._port, baudrate=INIT_BAUD, timeout=INIT_TIMEOUT)
 
             if save_conf:
                 self._cfg.save()
