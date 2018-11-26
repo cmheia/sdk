@@ -28,7 +28,7 @@ BAUD_SET_CMD = {
 
 
 def valid_speed(baud=DEFAULT_BAUD):
-    if baud in BAUD_SET_CMD:
+    if int(baud) in BAUD_SET_CMD:
         return True
     else:
         return False
@@ -67,7 +67,10 @@ class w600dl(object):
         self._log = logging.getLogger(self.__class__.__name__)
         logging.basicConfig(level=logging.INFO)
         self._image = image
+        self._port = port
         if os.path.isfile(image):
+            self._baud = int(baud)
+
             save_conf = False
 
             self._total_packets = int(
@@ -82,43 +85,44 @@ class w600dl(object):
                 self._config['base'] = {}
                 save_conf = True
 
-            if is_serial_avaliable(port):
-                if (not 'port' in self._config['base']) or self._config['base']['port'] != port:
-                    self._config['base']['port'] = port
+            if is_serial_avaliable(self._port):
+                if (not 'port' in self._config['base']) or self._port != self._config['base']['port']:
+                    self._config['base']['port'] = self._port
                     save_conf = True
             else:
                 if 'port' in self._config['base']:
-                    port = self._config['base']['port']
-                    self._log.warning('conf port is {}'.format(port))
+                    self._port = self._config['base']['port']
+                    self._log.warning('conf port is {}'.format(self._port))
                 else:
-                    self._config['base']['port'] = port
+                    self._config['base']['port'] = self._port
                     save_conf = True
 
-            if not is_serial_avaliable(port):
-                raise RuntimeError('port {} NOT exist'.format(port))
+            if not is_serial_avaliable(self._port):
+                raise RuntimeError('port {} NOT exist'.format(self._port))
 
-            if not valid_speed(baud):
-                if 'baud' in self._config['base'] and valid_speed(int(self._config['base']['baud'])):
-                    baud = int(self._config['base']['baud'])
-                    self._log.warning('conf baud is {}'.format(baud))
+            if not valid_speed(self._baud):
+                if 'baud' in self._config['base'] and valid_speed(self._config['base']['baud']):
+                    self._baud = int(self._config['base']['baud'])
+                    self._log.warning('conf baud is {}'.format(self._baud))
                 else:
-                    baud = DEFAULT_BAUD
-                    self._log.warning('default baud is {}'.format(baud))
-                    self._config['base']['baud'] = int(baud)
+                    self._baud = DEFAULT_BAUD
+                    self._log.warning('default baud is {}'.format(self._baud))
+                    self._config['base']['baud'] = self._baud
                     save_conf = True
-
-            self._port = port
-            self._baud = int(baud)
+            else:
+                if not 'baud' in self._config['base'] or self._baud != int(self._config['base']['baud']):
+                    self._log.warning('default baud is {}'.format(self._baud))
+                    self._config['base']['baud'] = self._baud
+                    save_conf = True
 
             self._log.warning(
-                'comm {} with {}, {}'.format(port, self._baud, INIT_TIMEOUT))
+                'comm {} with {}, {}'.format(self._port, self._baud, INIT_TIMEOUT))
             self._ser = serial.Serial(
                 port=port, baudrate=INIT_BAUD, timeout=INIT_TIMEOUT)
 
             if save_conf:
                 self._cfg.save()
         else:
-            self._port = port
             self._baud = 0
 
     def set_baudrate(self, baud):
