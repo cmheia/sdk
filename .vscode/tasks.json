@@ -63,7 +63,7 @@
         {
             "label": "JLinkGDBServer",
             "type": "shell",
-            "command": "JLinkGDBServerCL -select USB -device Cortex-M3 -if SWD -speed 6000 -noir",
+            "command": "JLinkGDBServerCL -select USB -device Cortex-M3 -if SWD -speed 12000 -noir",
             "problemMatcher": []
         },
         {
