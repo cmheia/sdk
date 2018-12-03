@@ -183,6 +183,9 @@ def get_base_env(*args, **kwargs):
     })
     # log_warn('base_Environment')
     # print(env.Dump())
+    log_warn('COMMAND_LINE_TARGETS: {}'.format(COMMAND_LINE_TARGETS))
+    log_warn('DEFAULT_TARGETS: {}'.format(DEFAULT_TARGETS))
+    log_warn('BUILD_TARGETS: {}'.format(BUILD_TARGETS))
     return env
 
 
@@ -276,25 +279,25 @@ class FlavorBuilder(object):
         # installing a file is still considered a type of file "build."
         # Add install targets for programs from all modules
         for module, prog_nodes in self._progs.items():
-            for prog in prog_nodes:
-                assert isinstance(prog, Node.FS.File)
+            for prog_elf in prog_nodes:
+                assert isinstance(prog_elf, Node.FS.File)
                 # If module is hierarchical, replace pathseps with periods
-                bin_name = path_to_key('{}.{}'.format(module, prog.name))
+                bin_name = path_to_key('{}.{}'.format(module, prog_elf.name))
                 install_dest = os.path.join('$BINDIR', bin_name)
                 log_info('Install {} As {}'.format(
-                    prog.rstr(), install_dest))
+                    prog_elf.rstr(), install_dest))
                 installed_artifact = self._env.InstallAs(os.path.join(
-                    '$BINDIR', bin_name), prog)
+                    '$BINDIR', bin_name), prog_elf)
                 log_warn('InstallAs: ' + installed_artifact[0].rstr())
 
     def finishing_progs(self):
         # Create flashable images for programs from all modules
         for module, prog_nodes in self._progs.items():
-            for prog in prog_nodes:
-                assert isinstance(prog, Node.FS.File)
-                prog_siz = self._env.SIZ(source=prog)
-                prog_lst = self._env.LST(source=prog)
-                prog_bin = self._env.BIN(source=prog)
+            for prog_elf in prog_nodes:
+                assert isinstance(prog_elf, Node.FS.File)
+                prog_siz = self._env.SIZ(source=prog_elf)
+                prog_lst = self._env.LST(source=prog_elf)
+                prog_bin = self._env.BIN(source=prog_elf)
                 prog_zbin = self._env.ZBIN(source=prog_bin)
                 prog_img = self._env.IMG(source=prog_bin)
                 prog_zimg = self._env.ZIMG(source=[prog_zbin, prog_bin])
@@ -308,13 +311,18 @@ class FlavorBuilder(object):
                 # log_warn('fls : {}'.format(prog_fls[0]))
 
                 flashable = self._env.InstallAs(
-                    [os.path.join('$BINDIR',
-                                  path_to_key('{}.{}'.format(module,
-                                                             os.path.basename(prog_zimg[0].rstr())))),
-                     os.path.join('$BINDIR',
-                                  path_to_key('{}.{}'.format(module,
-                                                             os.path.basename(prog_fls[0].rstr()))))],
-                    [prog_zimg, prog_fls])
+                    [
+                        # os.path.join('$BINDIR', path_to_key('{}.{}'.format(
+                        #     module, os.path.basename(prog_zimg[0].rstr())))),
+                        os.path.join('$BINDIR', path_to_key('{}.{}'.format(
+                            module, Flatten(prog_zimg)[0].name))),
+                        os.path.join('$BINDIR', path_to_key('{}.{}'.format(
+                            module, Flatten(prog_fls)[0].name))),
+                    ],
+                    [
+                        prog_zimg,
+                        prog_fls,
+                    ])
                 log_info('Flashable files {}'.format(
                     [f.rstr() for f in flashable]))
 
@@ -328,6 +336,7 @@ class FlavorBuilder(object):
                 raise StopError(
                     'Missing SConscript file for module {}.'.format(module))
             log_info('|- First pass: Reading module "{}" ...'.format(module))
+            # log_warn('|- variant_dir "{}" '.format(os.path.join( '$BUILDROOT', module)))
             shortcuts = dict(
                 Lib=self._lib_wrapper(self._env.Library, module),
                 StaticLib=self._lib_wrapper(self._env.StaticLibrary, module),

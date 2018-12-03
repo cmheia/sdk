@@ -201,9 +201,11 @@ ENV_OVERRIDES = {
         MAKEIMG_ALL=os.path.normpath('tools/makeimg_all'),
     ),
     'debug': dict(
+        # FLAVOR_NAME='Debug',
         BUILDROOT=os.path.join(_BUILD_BASE, 'Debug'),
     ),
     'release': dict(
+        # FLAVOR_NAME='Release',
         BUILDROOT=os.path.join(_BUILD_BASE, 'Release'),
     ),
 }
@@ -220,7 +222,7 @@ ENV_EXTENSIONS = {
         # CPPPATH=['#$BUILDROOT'],
         CPPDEFINES=[
             'GCC_COMPILE=1',
-            'WM_W600'
+            'WM_W600',
         ],
         CPPPATH=[
             '#demo',
@@ -313,14 +315,18 @@ ENV_EXTENSIONS = {
     'debug': dict(
         # Extra flags for debug C++ builds
         # CCFLAGS=['-g', '-DDEBUG'],
-        CPPDEFINES=['_DEBUG'],
+        CPPDEFINES=[
+            '_DEBUG',
+        ],
         CCFLAGS=['-O0'],
         ASFLAGS=['-O0'],
     ),
     'release': dict(
         # Extra flags for release C++ builds
         # CCFLAGS=['-O2', '-DNDEBUG'],
-        CPPDEFINES=['NDEBUG'],
+        CPPDEFINES=[
+            'NDEBUG',
+        ],
         CCFLAGS=['-Os'],
         ASFLAGS=['-Os'],
     ),
