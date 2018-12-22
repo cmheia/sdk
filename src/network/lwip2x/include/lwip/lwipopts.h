@@ -132,6 +132,7 @@ extern int sys_rand(void);
 #define TCP_DEFAULT_LISTEN_BACKLOG      8
 #define SO_REUSE                        1
 #define LWIP_ND6_MAX_MULTICAST_SOLICIT  10
+#define LWIP_RAW                        1
 
 #define LWIP_HAVE_LOOPIF                1
 #define ETHARP_SUPPORT_STATIC_ENTRIES   1
