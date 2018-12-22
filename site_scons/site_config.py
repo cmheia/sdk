@@ -194,7 +194,7 @@ ENV_OVERRIDES = {
         '-Wl,--start-group $SOURCES $_LIBDIRFLAGS $_LIBFLAGS -Wl,--end-group',
         # List of common objects
         COMMON_OBJECTS=[
-            ('#lib/wlan.a'),
+            ('#lib/libwlan.a'),
         ],
         SDKBINDIR=SDKBINDIR,
         MAKEIMG=os.path.normpath('tools/makeimg'),
