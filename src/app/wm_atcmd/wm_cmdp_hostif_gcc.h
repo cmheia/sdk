@@ -102,6 +102,7 @@
 #define HOSTIF_CMD_AP_SSID               0x4D
 #define HOSTIF_CMD_SKSRCIP             0x50
 #define HOSTIF_CMD_SKGHBN              0x51
+#define HOSTIF_CMD_SKGH6BN             0x58
 #define HOSTIF_CMD_CHLL                0x52
 #define HOSTIF_CMD_WARC                0x53
 #define HOSTIF_CMD_WEBS                0x54
@@ -952,6 +953,10 @@ typedef struct _HOSTIF_CMDRSP_PARAMS_SKGHBN {
     u8  h_addr_list[4];
 }__attribute__((packed))HOSTIF_CMDRSP_PARAMS_SKGHBN;
 
+typedef struct _HOSTIF_CMDRSP_PARAMS_SKGH6BN {
+    u32 sin6_addr[4];
+}__attribute__((packed))HOSTIF_CMDRSP_PARAMS_SKGH6BN;
+
 typedef struct _HOSTIF_CMDRSP_PARAMS_CHANNEL_LIST {
     u16  channellist;
 }__attribute__((packed))HOSTIF_CMDRSP_PARAMS_CHANNEL_LIST;
@@ -1137,6 +1142,8 @@ union HOSTIF_CMDRSP_PARAMS_UNION{
         HOSTIF_CMDRSP_PARAMS_SKSRCIP sksrcip;
 
         HOSTIF_CMDRSP_PARAMS_SKGHBN skghbn;
+
+        HOSTIF_CMDRSP_PARAMS_SKGH6BN skgh6bn;
 
         HOSTIF_CMDRSP_PARAMS_CHANNEL_LIST channel_list;
 

@@ -2649,6 +2649,44 @@ int skghbn_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd,
     return 0;
 }
 
+int skgh6bn_proc(u8                                set_opt,
+                 u8                                update_flash,
+                 union HOSTIF_CMD_PARAMS_UNION *   cmd,
+                 union HOSTIF_CMDRSP_PARAMS_UNION *cmdrsp)
+{
+    if (set_opt) {
+        struct addrinfo  hints;
+        struct addrinfo *addr_list;
+
+        /* Do name resolution with IPv6 */
+        memset(&hints, 0, sizeof(hints));
+        hints.ai_family   = AF_INET6; /* Allow IPv6 */
+        hints.ai_socktype = SOCK_RAW;
+        hints.ai_protocol = IPPROTO_ICMP;
+
+        if (getaddrinfo(
+                (char *) cmd->skghbn.ipstr, NULL, &hints, &addr_list)) {
+            return -CMD_ERR_SKT_CONN;
+        }
+
+        if (addr_list) {
+            if (AF_INET6 == addr_list->ai_family) {
+                int i;
+                for (i = 0; i < 4; i++) {
+                    cmdrsp->skgh6bn.sin6_addr[i]
+                        = (((struct sockaddr_in6 *) addr_list->ai_addr)
+                               ->sin6_addr.un.u32_addr[i]);
+                }
+            }
+            freeaddrinfo(addr_list); /* No longer needed */
+        } else {
+            return -CMD_ERR_INV_PARAMS;
+        }
+    }
+
+    return 0;
+}
+
 #endif
 
 int wprt_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, union HOSTIF_CMDRSP_PARAMS_UNION * cmdrsp){
@@ -4419,6 +4457,7 @@ static struct tls_cmd_t  at_ri_cmd_tbl[] = {
     { "SKRPTM", HOSTIF_CMD_NOP, 0xA, 1, 0, skrptm_proc},
     { "SKSRCIP", HOSTIF_CMD_SKSRCIP, 0x18, 0, 0, sksrcip_proc},
     { "SKGHBN", HOSTIF_CMD_SKGHBN, 0x22, 1, 1, skghbn_proc},
+    { "SKGH6BN", HOSTIF_CMD_SKGH6BN, 0x22, 1, 1, skgh6bn_proc},
 #endif
     { "WPRT", HOSTIF_CMD_WPRT, 0x7F, 1, 1,wprt_proc},
     { "SSID", HOSTIF_CMD_SSID, 0x7F, 1, 1,ssid_proc},
@@ -5190,7 +5229,7 @@ int at_parse_func(char *at_name, struct tls_atcmd_token_t *tok, union HOSTIF_CMD
                 return -CMD_ERR_INV_PARAMS;
             cmd->skrptm.mode = params;
         }
-    }else if(strcmp("SKGHBN", at_name) == 0){
+    }else if((strcmp("SKGHBN", at_name) == 0) || (strcmp("SKGH6BN", at_name) == 0)){
         u8 *ipstr = NULL;
         if(tok->arg_found != 1)
             return -CMD_ERR_INV_PARAMS;
@@ -5994,6 +6033,18 @@ int at_format_func(char *at_name, u8 set_opt, u8 update_flash, union HOSTIF_CMDR
         *res_len = sprintf(res_resp, "+OK=\"%d.%d.%d.%d\"", \
 					cmdrsp->skghbn.h_addr_list[0], cmdrsp->skghbn.h_addr_list[1], \
 					cmdrsp->skghbn.h_addr_list[2], cmdrsp->skghbn.h_addr_list[3]);
+    }else if(strcmp("SKGH6BN", at_name) == 0){
+        *res_len
+            = sprintf(res_resp,
+                      "+OK=\"%x:%x:%x:%x:%x:%x:%x:%x\"",
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[0]) >> 16) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[0]) >> 0) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[1]) >> 16) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[1]) >> 0) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[2]) >> 16) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[2]) >> 0) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[3]) >> 16) & 0xFFFF,
+                      (ntohl(cmdrsp->skgh6bn.sin6_addr[3]) >> 0) & 0xFFFF);
     }
 #endif
 #if TLS_CONFIG_HTTP_CLIENT_TASK
