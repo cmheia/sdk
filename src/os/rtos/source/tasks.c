@@ -64,7 +64,7 @@ task.h is included from an application file. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "rtostimers.h"
-#include "lwip/timers.h"
+#include "lwip/timeouts.h"
 #include "StackMacros.h"
 #include "wm_config.h"
 #include "wm_watchdog.h"

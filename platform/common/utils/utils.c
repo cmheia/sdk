@@ -18,6 +18,7 @@
 #include "tls_common.h"
 #include "wm_debug.h"
 #include "wm_sockets.h"
+#include "wm_wifi.h"
 #include "utils.h"
 
 
@@ -461,6 +462,3 @@ int gettimeofday(struct timeval *tv, void *tz)
 	tv->tv_usec = 10000 * (current_tick % 100);
 	return ret;
 }
-
-
-

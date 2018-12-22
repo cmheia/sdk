@@ -11,7 +11,7 @@
 #define WM_NETIF_H
 #include "wm_config.h"
 #if TLS_CONFIG_LWIP_VER2_0_3
-#include "wm_netif2.0.3.h"
+#include "wm_netif2x.h"
 #else
 #include "wm_wifi.h"
 #include "wm_type_def.h"

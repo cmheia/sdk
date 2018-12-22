@@ -11,7 +11,7 @@
 #define WM_SOCKET_API_H
 #include "wm_config.h"
 #if TLS_CONFIG_LWIP_VER2_0_3
-#include "wm_sockets2.0.3.h"
+#include "wm_sockets2x.h"
 #else
 
 #include <stdio.h>

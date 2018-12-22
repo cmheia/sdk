@@ -21,7 +21,7 @@
 #define  TLS_CONFIG_11N                     CFG_WIFI_ON
 
 #define  TLS_CONFIG_AP_OPT_PS              (CFG_ON && TLS_CONFIG_AP)/* SOFTAP POWER SAVE */
-#define  TLS_CONFIG_AP_OPT_FWD             (CFG_ON && TLS_CONFIG_AP)/* IP PACKET FORWARD */
+#define  TLS_CONFIG_AP_OPT_FWD             (CFG_OFF && TLS_CONFIG_AP)/* IP PACKET FORWARD */
 
 #define  TLS_CONFIG_WPS       				CFG_WIFI_ON /* WPS&EAPOL should be enabled together */
 #define  TLS_IEEE8021X_EAPOL   				CFG_WIFI_ON

@@ -64,6 +64,64 @@
             ]
         },
         {
+            "name": "(gdb) ipv6",
+            // 调试会话开始前要运行的任务
+            // "preLaunchTask": "build",
+            "type": "cppdbg",
+            // 请求配置类型，可以为启动（launch）或附加（attach）
+            "request": "launch",
+            "targetArchitecture": "arm",
+            // 将要进行调试的程序的路径
+            "program": "ipv6.elf",
+            // 程序调试时传递给程序的命令行参数
+            "args": [],
+            "stopAtEntry": true,
+            // 调试程序时的工作目录，一般为${workspaceFolder}即代码所在目录
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            // 调试时是否显示控制台窗口
+            "externalConsole": true,
+            "MIMode": "gdb",
+            // GDB的路径
+            "miDebuggerPath": "arm-none-eabi-gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "launchCompleteCommand": "None",
+            "miDebuggerServerAddress": "localhost:2331",
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote :2331",
+                    "description": "connect to server",
+                    "ignoreFailures": false
+                },
+                {
+                    "text": "file E:/embedded/Wi-Fi/W600/sdk/Debug/example/ipv6/ipv6.elf",
+                    "description": "load symbols",
+                    "ignoreFailures": false
+                },
+                // {
+                //     "text": "load",
+                //     "description": "download file to MCU",
+                //     "ignoreFailures": false
+                // },
+                {
+                    "text": "monitor reset",
+                    "description": "reset MCU",
+                    "ignoreFailures": false
+                },
+                {
+                    "text": "b main",
+                    "description": "set breakpoints at main",
+                    "ignoreFailures": false
+                },
+            ]
+        },
+        {
             "name": "Scons Build System(Debug)",
             "type": "python",
             "request": "launch",

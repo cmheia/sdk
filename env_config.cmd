@@ -27,5 +27,6 @@ set GCC_PATH=
 set JLINK_HOME=
 set OPENOCD_PATH=
 
-set ECLIPSE_PATH=E:\embedded\ide\eclipse\eclipse-cpp-oxygen-3a\eclipse.exe
+rem set ECLIPSE_PATH=E:\embedded\ide\eclipse\eclipse-cpp-oxygen-3a\eclipse.exe
+set ECLIPSE_PATH=E:\embedded\ide\eclipse\eclipse-cpp-2018-09\eclipse.exe
 set VSCODE_PATH="C:\Program Files\Microsoft VS Code\Code.exe"

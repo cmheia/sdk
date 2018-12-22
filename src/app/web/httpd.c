@@ -94,6 +94,7 @@
 #include "wm_watchdog.h"
 #include "wm_params.h"
 #include "wm_wifi_oneshot.h"
+#include "wm_wifi.h"
 
 //#include "lwip/tcp.h"
 

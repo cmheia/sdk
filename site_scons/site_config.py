@@ -194,7 +194,7 @@ ENV_OVERRIDES = {
         '-Wl,--start-group $SOURCES $_LIBDIRFLAGS $_LIBFLAGS -Wl,--end-group',
         # List of common objects
         COMMON_OBJECTS=[
-            ('#lib/wlan.a'),
+            ('#lib/libwlan.a'),
         ],
         SDKBINDIR=SDKBINDIR,
         MAKEIMG=os.path.normpath('tools/makeimg'),
@@ -297,10 +297,9 @@ ENV_EXTENSIONS = {
             '#src/app/sslserver',
             '#src/app/web',
             '#src/app/wm_atcmd',
-            '#src/network/api2.0.3',
-            '#src/network/lwip2.0.3/include',
-            '#src/network/lwip2.0.3/include/arch',
-            '#src/network/lwip2.0.3/include/lwip',
+            '#src/network/api2x',
+            '#src/network/lwip2x/include',
+            '#src/network/lwip2x/include/compat/posix',
             '#src/os/os_ports',
             '#src/os/rtos/include',
             '#src/wlan/driver',

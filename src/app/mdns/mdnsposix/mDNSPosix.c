@@ -154,7 +154,7 @@
 #include "utils.h"
 #include "APSCommonServices.h"
 #include "lwip/sockets.h"
-#include "wm_sockets.h"
+#include "wm_netif.h"
 #include "lwip/inet.h"
 #include "lwip/igmp.h"
 #include <time.h>                   // platform support for UTC time
@@ -382,7 +382,7 @@ static void SocketDataReady(mDNS *const m, PosixNetworkInterface *intf, int skt)
 		{
 			struct tls_ethif * ethif = tls_netif_get_ethif();
 			destAddr.type = mDNSAddrType_IPv4;
-			destAddr.ip.v4.NotAnInteger = ip_addr_get_ip4_u32(&ethif->ip_addr);
+			destAddr.ip.v4.NotAnInteger = ethif->ip_addr.addr;
 		}
 #endif
 
@@ -893,10 +893,10 @@ static int SetupInterfaceList(mDNS *const m)
 		memset(&sin_ip, 0, sizeof(struct sockaddr_in));
 		memset(&sin_mask, 0, sizeof(struct sockaddr_in));
 		sin_ip.sin_family = AF_INET;
-		sin_ip.sin_addr.s_addr = ip_addr_get_ip4_u32(&ethif->ip_addr);
+		sin_ip.sin_addr.s_addr = ethif->ip_addr.addr;
 		
 		sin_mask.sin_family = AF_INET;
-		sin_mask.sin_addr.s_addr = ip_addr_get_ip4_u32(&ethif->netmask);
+		sin_mask.sin_addr.s_addr = ethif->netmask.addr;
 		
 		err = SetupOneInterface(m, (struct sockaddr*)&sin_ip, "netif0");
 #ifdef mDNSIPv6Support

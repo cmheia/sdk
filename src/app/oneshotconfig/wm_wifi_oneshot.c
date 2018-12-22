@@ -1240,7 +1240,9 @@ u8 tls_wifi_dataframe_recv(struct ieee80211_hdr *hdr, u32 data_len)
 		return 1;
 	}
 
+#if TLS_CONFIG_UDP_ONE_SHOT
 	tls_os_sem_acquire(gWifiRecvSem, 0);
+#endif
 
 #if TLS_CONFIG_QQLINK_MODE_ONESHOT
     tls_process_qq_link_packet((u8 *)hdr, data_len);
@@ -1264,7 +1266,9 @@ u8 tls_wifi_dataframe_recv(struct ieee80211_hdr *hdr, u32 data_len)
 
 #endif
 
+#if TLS_CONFIG_UDP_ONE_SHOT
 	tls_os_sem_release(gWifiRecvSem);
+#endif
 
 	return 1;
 }

@@ -38,7 +38,7 @@
 #include "wm_rmms.h"
 #include "ping.h"
 #include "iperf.h"
-
+#include "wm_internal_flash.h"
 
 const u8 SysCreatedDate[] = __DATE__;
 const u8 SysCreatedTime[] = __TIME__;
@@ -2366,7 +2366,26 @@ int lkstt_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, 
     return 0;
 }
 
-#if 1 //TLS_CONFIG_SOCKET_RAW
+int lk6stt_proc(u8                                set_opt,
+                u8                                update_flash,
+                union HOSTIF_CMD_PARAMS_UNION *   cmd,
+                union HOSTIF_CMDRSP_PARAMS_UNION *cmdrsp)
+{
+    struct tls_cmd_link_status_t lk;
+    int                          i;
+
+    memset(&lk, 0, sizeof(struct tls_cmd_link_status_t));
+    tls_cmd_get_link_status(&lk);
+    cmdrsp->lkstt.status = lk.status;
+    for (i = 0; i < LWIP_IPV6_NUM_ADDRESSES; i++) {
+        memcpy(&cmdrsp->lk6stt.ip6[i], &lk.ip6[i].ip, 16);
+        cmdrsp->lk6stt.zone6[i]   = lk.ip6[i].zone;
+        cmdrsp->lk6stt.status6[i] = lk.ip6[i].status;
+    }
+    return 0;
+}
+
+#if 1 // TLS_CONFIG_SOCKET_RAW
 int entm_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, union HOSTIF_CMDRSP_PARAMS_UNION * cmdrsp){
     u16 rx_fifocnt;
     u8 ch;
@@ -4388,6 +4407,7 @@ static struct tls_cmd_t  at_ri_cmd_tbl[] = {
     { "WLEAV", HOSTIF_CMD_WLEAVE, 0x13, 1, 0,wleav_proc},
     { "WSCAN", HOSTIF_CMD_WSCAN, 0x11, 0, 0,wscan_proc},
     { "LKSTT", HOSTIF_CMD_LINK_STATUS, 0x19, 0, 0,lkstt_proc},
+    { "LK6STT", HOSTIF_CMD_LINK6_STATUS, 0x19, 0, 0,lk6stt_proc},
 #if 1 //TLS_CONFIG_SOCKET_RAW
     { "ENTM", HOSTIF_CMD_NOP, 0x1, 0, 0, entm_proc},
     { "SKCT", HOSTIF_CMD_SKCT, 0x22, 4, 6, skct_proc},
@@ -5681,6 +5701,24 @@ int at_format_func(char *at_name, u8 set_opt, u8 update_flash, union HOSTIF_CMDR
 	            cmdrsp->lkstt.dns1[0], cmdrsp->lkstt.dns1[1], cmdrsp->lkstt.dns1[2], cmdrsp->lkstt.dns1[3],
 	            cmdrsp->lkstt.dns2[0], cmdrsp->lkstt.dns2[1], cmdrsp->lkstt.dns2[2], cmdrsp->lkstt.dns2[3]);
 	    }
+    } else if (strcmp("LK6STT", at_name) == 0) {
+        if (cmdrsp->lkstt.status == 0) {
+            *res_len = sprintf(res_resp, "+OK=%u", cmdrsp->lkstt.status);
+        } else {
+            int   i;
+            char *p = res_resp;
+            char  buf[IP6ADDR_STRLEN_MAX + 1];
+            p += sprintf(res_resp, "+OK=%d", cmdrsp->lk6stt.status);
+            for (i = 0; i < LWIP_IPV6_NUM_ADDRESSES; i++) {
+                inet_ntop(AF_INET6, &cmdrsp->lk6stt.ip6[i], buf, sizeof(buf));
+                p += sprintf(p,
+                             ",\"%s,%d,%X\"",
+                             buf,
+                             cmdrsp->lk6stt.zone6[i],
+                             cmdrsp->lk6stt.status6[i]);
+            }
+            *res_len = p - res_resp;
+        }
     }else if (strcmp("DNS", at_name) == 0 || strcmp("PASS", at_name) == 0){
         if (set_opt) {
     		*res_len = atcmd_ok_resp(res_resp);

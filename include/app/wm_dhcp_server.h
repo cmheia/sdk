@@ -66,7 +66,7 @@ void tls_dhcps_stop(void);
  *
  * @note           None
  */
-ip_addr_t *tls_dhcps_getip(const u8 *mac);
+ip4_addr_t *tls_dhcps_getip(const u8 *mac);
 
 /**
  * @brief          This function is used to set DHCP server's DNS address

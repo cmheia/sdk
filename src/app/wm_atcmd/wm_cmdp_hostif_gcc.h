@@ -76,6 +76,7 @@
 #define HOSTIF_CMD_WLEAVE              0x21
 #define HOSTIF_CMD_WSCAN               0x22
 #define HOSTIF_CMD_LINK_STATUS         0x23
+#define HOSTIF_CMD_LINK6_STATUS         0x26
 //#define HOSTIF_CMD_WPSST               0x24
 #define HOSTIF_CMD_AP_LINK_STATUS        0x25
 #define HOSTIF_CMD_SKCT                0x28
@@ -756,6 +757,13 @@ typedef struct _HOSTIF_CMDRSP_PARAMS_LKSTT {
     u8      dns2[4];
 }__attribute__((packed))HOSTIF_CMDRSP_PARAMS_LKSTT; 
 
+typedef struct _HOSTIF_CMDRSP_PARAMS_LK6STT {
+    u32 ip6[3][4];
+    u8  zone6[3];
+    u8  status6[3];
+    u8  status;
+}__attribute__((packed))HOSTIF_CMDRSP_PARAMS_LK6STT;
+
 typedef struct _HOSTIF_CMDRSP_PARAMS_SKCT {
     u8      socket;
 }__attribute__((packed))HOSTIF_CMDRSP_PARAMS_SKCT; 
@@ -1055,6 +1063,8 @@ union HOSTIF_CMDRSP_PARAMS_UNION{
         HOSTIF_CMDRSP_PARAMS_JOIN join;
 
         HOSTIF_CMDRSP_PARAMS_LKSTT lkstt; 
+
+        HOSTIF_CMDRSP_PARAMS_LK6STT lk6stt;
 
         HOSTIF_CMDRSP_PARAMS_SKCT skct; 
 

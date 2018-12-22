@@ -96,7 +96,7 @@ typedef struct __DHCP_CLIENT
 	DHCP_CLIENT_STATE State;
 	INT32U Timeout;
 	/* Attention!!! MUST BE __align(4) */
-	ip_addr_t IpAddr;
+	ip4_addr_t IpAddr;
 	INT8U MacAddr[6];
 	INT32U Lease;
 }DHCP_CLIENT, *PDHCP_CLIENT;
@@ -106,12 +106,12 @@ typedef struct __DHCP_SERVER
 	INT8U Enable;
 	struct udp_pcb * Socket;
 	/* Attention!!! MUST BE __align(4) */
-	ip_addr_t ServerIpAddr;
-	ip_addr_t StartIpAddr;
-	ip_addr_t SubnetMask;
-	ip_addr_t GateWay;
-	ip_addr_t Dns1;
-	ip_addr_t Dns2;	
+	ip4_addr_t ServerIpAddr;
+	ip4_addr_t StartIpAddr;
+	ip4_addr_t SubnetMask;
+	ip4_addr_t GateWay;
+	ip4_addr_t Dns1;
+	ip4_addr_t Dns2;
 	INT32U LeaseTime;
 	DHCP_CLIENT Clients[DHCPS_HISTORY_CLIENT_NUM];
 }DHCP_SERVER, *PDHCP_SERVER;
@@ -156,7 +156,7 @@ void DHCPS_Stop(void);
 INT8S DHCPS_ClientDelete(INT8U * MacAddr);
 void DHCPS_RecvCb(void *Arg, struct udp_pcb *Pcb, struct pbuf *P, ip_addr_t *Addr, INT16U Port);
 void DHCPS_SetDns(INT8U numdns, INT32U dns);
-ip_addr_t *DHCPS_GetIpByMac(const INT8U *mac_addr);
+ip4_addr_t *DHCPS_GetIpByMac(const INT8U *mac_addr);
 #endif
 #endif /* __DHCP_SERVER_H_175137__ */
  

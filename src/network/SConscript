@@ -6,7 +6,7 @@ from site_utils import log_err, log_info, log_warn
 # ARTIFACT = os.path.basename(Dir('.').abspath)
 ARTIFACT = os.path.basename(os.getcwd())
 
-LWIP_VERSION = '2.0.3'
+LWIP_VERSION = '2x'
 
 SOURCES = Glob('api' + LWIP_VERSION + '/*.c') \
     + Glob('lwip' + LWIP_VERSION + '/*.c') \
