@@ -57,7 +57,6 @@
 #include "lwip/nd6.h"
 #include "lwip/mld6.h"
 #include "lwip/api.h"
-#include "lwip/alg.h"
 
 #include "netif/ppp/ppp_opts.h"
 #include "netif/ppp/ppp_impl.h"
@@ -373,9 +372,6 @@ lwip_init(void)
 #endif /* LWIP_DNS */
 #if PPP_SUPPORT
   ppp_init();
-#endif
-#if TLS_CONFIG_AP_OPT_FWD
-  alg_napt_init();
 #endif
 
 #if LWIP_TIMERS
