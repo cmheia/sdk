@@ -100,7 +100,10 @@ CFLAGS = [
 
 ASFLAGS = CFLAGS + ['$_CPPDEFFLAGS']
 
-LINKERSCRIPT = 'ld/w600.ld'
+if 'FLASH_SIZE' in os.environ and '2M' == os.environ['FLASH_SIZE']:
+    LINKERSCRIPT = 'ld/w600_2m.ld'
+else:
+    LINKERSCRIPT = 'ld/w600_1m.ld'
 
 LINKFLAGS = CFLAGS + [
     '-T' + LINKERSCRIPT,
