@@ -309,6 +309,13 @@ void task_start (void *data)
 	    tls_param_set(TLS_PARAM_ID_PSM, &enable, TRUE);	  
 	}
 
+    do {
+        extern int lwip_sys_debug_level_get(void);
+        u32        mode = FALSE;
+        tls_param_get(TLS_PARAM_ID_DEBUG_MODE, &mode, TRUE);
+        printf("debug mode:%u, %d\r\n", mode, lwip_sys_debug_level_get());
+    } while (0);
+
 	UserMain();
 	tls_sys_auto_mode_run();
 

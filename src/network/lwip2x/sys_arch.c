@@ -16,15 +16,41 @@ OS_STK         lwip_task_stk[LWIP_TASK_MAX*LWIP_STK_SIZE];
 u8_t            lwip_task_priopity_stack[LWIP_TASK_MAX];
 //OS_TCB          lwip_task_tcb[LWIP_TASK_MAX];
 
-
+#ifdef LWIP_DEBUG
+bool __g_lwip_debug_print;
+#endif
 
 /**
  * \brief Initialize the sys_arch layer.
  */
 void sys_init(void)
 {
+#ifdef LWIP_DEBUG
+    u32 mode = FALSE;
 
+    tls_param_get(TLS_PARAM_ID_DEBUG_MODE, &mode, TRUE);
+    if (0 != mode) {
+        __g_lwip_debug_print = TRUE;
+    }
+#endif
 }
+
+#ifdef LWIP_DEBUG
+void lwip_sys_debug_level_set(int level)
+{
+    printf("lwip debug level->%d\r\n", level);
+    if (0 != level) {
+        __g_lwip_debug_print = TRUE;
+    } else {
+        __g_lwip_debug_print = FALSE;
+    }
+}
+
+int lwip_sys_debug_level_get(void)
+{
+    return __g_lwip_debug_print;
+}
+#endif
 
 u32_t sys_now(void)
 {

@@ -262,7 +262,8 @@ int tls_cmd_get_oneshot( u8 *oneshotflag);
 int tls_cmd_get_pass( u8 *password);
 int tls_cmd_set_pass( u8* password, u8 update_flash);
 
-int tls_cmd_set_dbg( u32 dbg);
+int tls_cmd_get_dbg(u32 *dbg);
+int tls_cmd_set_dbg(u32 dbg, u8 update_flash);
 int tls_cmd_wr_flash(struct tls_cmd_flash_t *wr_flash);
 int tls_cmd_get_sha1( u8 *psk);
 int tls_cmd_set_sha1( u8* psk, u8 update_flash);

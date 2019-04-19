@@ -56,11 +56,13 @@
 #define LWIP_PLATFORM_ASSERT(x)
 #endif
 
-#ifdef LWIP_PLATFORM_DIAG
-#define LWIP_PLATFORM_DIAG(x) do { printf x;} while(0)
-#else
-#define LWIP_PLATFORM_DIAG(x) do { printf x;} while(0)
-#endif
+#define LWIP_PLATFORM_DIAG(x)                                                 \
+    do {                                                                      \
+        extern bool __g_lwip_debug_print;                                     \
+        if (__g_lwip_debug_print) {                                           \
+            printf x;                                                         \
+        }                                                                     \
+    } while (0)
 
 #define LWIP_ERRNO_STDINCLUDE
 

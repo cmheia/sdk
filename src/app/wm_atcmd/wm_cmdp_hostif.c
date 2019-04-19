@@ -3066,12 +3066,19 @@ int atpt_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, u
     return ret ? -CMD_ERR_OPS : 0;
 }
 
-int dbg_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, union HOSTIF_CMDRSP_PARAMS_UNION * cmdrsp){
+int dbg_proc(u8                                set_opt,
+             u8                                update_flash,
+             union HOSTIF_CMD_PARAMS_UNION *   cmd,
+             union HOSTIF_CMDRSP_PARAMS_UNION *cmdrsp)
+{
+    int ret = 0;
     if (set_opt) {
-    	tls_cmd_set_dbg(cmd->dbg.dbg_level);
+        ret = tls_cmd_set_dbg(cmd->dbg.dbg_level, update_flash);
+    } else {
+        ret = tls_cmd_get_dbg(&cmdrsp->dbg.dbg_level);
     }
 
-    return 0;
+    return ret ? -CMD_ERR_OPS : 0;
 }
 
 int espc_proc(u8 set_opt, u8 update_flash, union HOSTIF_CMD_PARAMS_UNION *cmd, union HOSTIF_CMDRSP_PARAMS_UNION * cmdrsp){
@@ -4474,7 +4481,7 @@ static struct tls_cmd_t  at_ri_cmd_tbl[] = {
     { "UPNP", HOSTIF_CMD_UPNP, 0x7F, 0, 0, upnp_proc},
     { "DNAME", HOSTIF_CMD_DNAME, 0x7F, 0, 0, dname_proc},
     { "ATPT", HOSTIF_CMD_ATPT, 0x7F, 1, 2, atpt_proc},
-    { "&DBG", HOSTIF_CMD_DBG, 0x22, 1, 4, dbg_proc},
+    { "&DBG", HOSTIF_CMD_DBG, 0x7F, 1, 2, dbg_proc},
     { "ESPC", HOSTIF_CMD_NOP, 0xF, 1, 0, espc_proc},
     { "ESPT", HOSTIF_CMD_NOP, 0xF, 1, 0, espt_proc},
     { "WEBS", HOSTIF_CMD_WEBS, 0x7F, 1, 1, webs_proc},
@@ -5014,14 +5021,17 @@ int at_parse_func(char *at_name, struct tls_atcmd_token_t *tok, union HOSTIF_CMD
         }
     }
     else if(strcmp("&DBG", at_name) == 0){
-        u32 dbg;
-        int ret = 0;
-        if(tok->arg_found != 1)
+        if (tok->arg_found > 1) {
             return -CMD_ERR_INV_PARAMS;
-        ret = string_to_uint(tok->arg[0], &dbg);
-        if(ret)
-            return -CMD_ERR_INV_PARAMS;
-        cmd->dbg.dbg_level = dbg;
+        }
+        if (tok->arg_found == 1) {
+            u32 dbg;
+            int ret = string_to_uint(tok->arg[0], &dbg);
+            if (ret) {
+                return -CMD_ERR_INV_PARAMS;
+            }
+            cmd->dbg.dbg_level = dbg;
+        }
     }else if(strcmp("ESPC", at_name) == 0){
         int ret;
 	    u32 params;
@@ -5695,7 +5705,7 @@ int at_format_func(char *at_name, u8 set_opt, u8 update_flash, union HOSTIF_CMDR
     else if ((strcmp("Z", at_name) == 0) || (strcmp("E", at_name) == 0) || (strcmp("ENTS", at_name) == 0) ||
         (strcmp("RSTF", at_name) == 0) || (strcmp("PMTF", at_name) == 0) || (strcmp("IOC", at_name) == 0) ||
         (strcmp("WLEAV", at_name) == 0) || (strcmp("AOLM", at_name) == 0) || (strcmp("DDNS", at_name) == 0) ||
-        (strcmp("UPNP", at_name) == 0) || (strcmp("DNAME", at_name) == 0) || (strcmp("&DBG", at_name) == 0) ||
+        (strcmp("UPNP", at_name) == 0) || (strcmp("DNAME", at_name) == 0) ||
         (strcmp("&UPDP", at_name) == 0)){
         *res_len = atcmd_ok_resp(res_resp);
     }else if (strcmp("WJOIN", at_name) == 0) {
@@ -5765,6 +5775,7 @@ int at_format_func(char *at_name, u8 set_opt, u8 update_flash, union HOSTIF_CMDR
     }else if((strcmp("WPRT", at_name) == 0) || (strcmp("ENCRY", at_name) == 0) || (strcmp("BRDSSID", at_name) == 0) ||
              (strcmp("WATC", at_name) == 0) || (strcmp("WPSM", at_name) == 0) || (strcmp("WARC", at_name) == 0) ||
              (strcmp("WARM", at_name) == 0) || (strcmp("ATM", at_name) == 0) || (strcmp("PORTM", at_name) == 0) ||
+             (strcmp("&DBG", at_name) == 0) ||
              (strcmp("IOM", at_name) == 0) || (strcmp("CMDM", at_name) == 0) || (strcmp("ONESHOT", at_name) == 0)
              ||(strcmp("ONEMODE", at_name) == 0)
 #if TLS_CONFIG_AP

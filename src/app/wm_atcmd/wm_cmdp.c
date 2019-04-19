@@ -1591,7 +1591,12 @@ int tls_cmd_get_webs( struct tls_webs_cfg *webcfg)
 //extern u32 tls_debug_level;
 //extern u32 wl_debug_components;
 
-int tls_cmd_set_dbg( u32 dbg)
+int tls_cmd_get_dbg(u32 *dbg)
+{
+    return tls_param_get(TLS_PARAM_ID_DEBUG_MODE, dbg, 0);
+}
+
+int tls_cmd_set_dbg(u32 dbg, u8 update_flash)
 {
 #if 0//TLS_WL_DEBUG //: WANGM: when CONFIG_WPS, it cannot be compiled correctly
     if (dbg == 0) {
@@ -1608,8 +1613,10 @@ int tls_cmd_set_dbg( u32 dbg)
     } else
         ;
 #endif
+    extern void lwip_sys_debug_level_set(int level);
 
-    return 0;
+    lwip_sys_debug_level_set(dbg);
+    return tls_param_set(TLS_PARAM_ID_DEBUG_MODE, &dbg, (bool) update_flash);
 }
 
 int tls_cmd_wr_flash(

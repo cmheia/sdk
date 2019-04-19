@@ -22,6 +22,8 @@
 
 #define LWIP_COMPAT_SOCKETS             2
 
+#define LWIP_PROVIDE_ERRNO /* Make lwip/arch.h define the codes which are used */
+
 #define LWIP_SOCKET                     TLS_CONFIG_SOCKET_STD
 #define LWIP_NETCONN                    TLS_CONFIG_SOCKET_STD
 
