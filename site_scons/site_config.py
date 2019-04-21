@@ -30,6 +30,7 @@ FLOAT_ABI = 'soft'
 FPU_TYPE = 'auto'
 
 CFLAGS = [
+    # https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/Code-Gen-Options.html#Code-Gen-Options
     # Specifies the name of the target ARM processor.
     '-mcpu=' + CPU_CORE_NAME,
     # Select between generating code that executes in ARM and Thumb states.
@@ -96,6 +97,27 @@ CFLAGS = [
     # gcc -c -O2 -flto bar.c
     # gcc -o myprog -flto -O2 foo.o bar.o
     # '-flto',
+    # Enable exception handling. Generates extra code needed
+    # to propagate exceptions.
+    # For some targets, this implies GCC generates frame unwind information
+    # for all functions, which can produce significant data size overhead,
+    # although it does not affect execution.
+    # If you do not specify this option, GCC enables it by default
+    # for languages like C++ that normally require exception handling,
+    # and disables it for languages like C that do not normally require it.
+    # However, you may need to enable this option when compiling C code
+    # that needs to interoperate properly with exception handlers
+    # written in C++.
+    # You may also wish to disable this option if you are compiling
+    # older C++ programs that don't use exception handling.
+    # '-fexceptions',
+    # Similar to -fexceptions, except that it just generates
+    # any needed static data,
+    # but does not affect the generated code in any other way.
+    # You normally do not need to enable this option;
+    # instead, a language processor that needs
+    # this handling enables it on your behalf.
+    '-funwind-tables',
 ]
 
 ASFLAGS = CFLAGS + ['$_CPPDEFFLAGS']
