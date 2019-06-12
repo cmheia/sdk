@@ -107,12 +107,12 @@ class w600dl(object):
                 else:
                     self._baud = DEFAULT_BAUD
                     self._log.warning('default baud is {}'.format(self._baud))
-                    self._config['base']['baud'] = self._baud
+                    self._config['base']['baud'] = str(self._baud)
                     save_conf = True
             else:
                 if not 'baud' in self._config['base'] or self._baud != int(self._config['base']['baud']):
                     self._log.warning('default baud is {}'.format(self._baud))
-                    self._config['base']['baud'] = self._baud
+                    self._config['base']['baud'] = str(self._baud)
                     save_conf = True
 
             self._log.warning(
