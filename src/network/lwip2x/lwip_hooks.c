@@ -70,6 +70,8 @@ void hook_dhcp4_append_options(struct netif *   netif,
 struct netif *
 hook_arp_filter_netif(struct pbuf *p, struct netif *netif, u16_t type)
 {
+#ifdef LWIP_DEBUG
+    extern bool __g_lwip_debug_print;
     char *pkt_type = NULL;
 
     const struct eth_hdr *ethhdr = p->payload;
@@ -91,7 +93,7 @@ hook_arp_filter_netif(struct pbuf *p, struct netif *netif, u16_t type)
         break;
     }
 
-    if (pkt_type) {
+    if (__g_lwip_debug_print && pkt_type) {
         char if_name[8];
 
         sprintf(if_name, "%c%c%d", netif->name[0], netif->name[1], netif->num);
@@ -102,6 +104,6 @@ hook_arp_filter_netif(struct pbuf *p, struct netif *netif, u16_t type)
                      p->tot_len));
         hexdump(if_name, &ethhdr->dest, p->len - ETH_PAD_SIZE);
     }
-
+#endif
     return netif;
 }
