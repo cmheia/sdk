@@ -102,6 +102,19 @@ void ipv6_app(struct netif *netif)
     }
 }
 
+static void web_srv(void)
+{
+    extern void httpd_init(unsigned short port);
+
+    struct tls_webs_cfg webcfg;
+    tls_param_get(TLS_PARAM_ID_WEBS_CONFIG, &webcfg, 0);
+
+    if (webcfg.AutoRun) {
+        printf("start httpd at %d\r\n", webcfg.PortNum);
+        httpd_init(webcfg.PortNum);
+    }
+}
+
 void app_task(void *data)
 {
     int  id = 0;
@@ -110,6 +123,8 @@ void app_task(void *data)
     struct netif *netif;
 
     led_init();
+
+    web_srv();
 
     netif = tls_get_netif();
 
