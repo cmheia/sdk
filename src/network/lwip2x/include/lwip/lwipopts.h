@@ -174,4 +174,9 @@ extern int sys_rand(void);
 #endif
 #define LWIP_ARP_FILTER_NETIF_FN        hook_arp_filter_netif
 
+/* GCC 9.2.1 */
+#define LWIP_SOCKET_SELECT              1
+#define LWIP_TIMEVAL_PRIVATE            0
+#define IN_ADDR_T_DEFINED
+
 #endif /* end of __LWIP_OPTS_H */

@@ -5,7 +5,9 @@
 #include <stdio.h>
 
 /* Define platform endianness */
+#ifndef BYTE_ORDER
 #define BYTE_ORDER LITTLE_ENDIAN
+#endif
 
 #define LWIP_NO_STDINT_H 1
 #include "wm_type_def.h"
