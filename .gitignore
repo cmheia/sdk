@@ -23,6 +23,9 @@ Bin/*
 Debug
 Release
 tools/py_scripts/flasher.ini
+tools/makeimg
+tools/makeimg_all
+tools/makeimg_dbg
 *.img
 *.bin
 *.output/
