@@ -118,6 +118,10 @@ CFLAGS = [
     # instead, a language processor that needs
     # this handling enables it on your behalf.
     '-funwind-tables',
+    # https://stackoverflow.com/questions/9922521/why-doesnt-clang-show-color-output-under-scons
+    # https://gcc.gnu.org/onlinedocs/gcc-5.1.0/gcc/Language-Independent-Options.html
+    # Use color in diagnostics.
+    '-fdiagnostics-color',
 ]
 
 ASFLAGS = CFLAGS + ['$_CPPDEFFLAGS']
